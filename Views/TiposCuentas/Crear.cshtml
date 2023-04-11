@@ -1,0 +1,19 @@
+@model TipoCuenta
+@{
+    ViewData["Title"]="Crear cuenta";
+}
+<h1>Tipos de cuentas</h1>
+
+
+ <div asp-validation-summary="All"></div>
+
+
+<form asp-action="Crear">
+  <div class="form-group">
+    <label asp-for="Nombre" class="form-label"></label>
+    <input type="text" class="form-control" asp-for="Nombre" >
+    <small id="cuentaHelp" class="form-text text-muted">Ingrese su tipo de cuenta</small>
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
