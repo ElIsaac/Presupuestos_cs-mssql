@@ -1,0 +1,53 @@
+@model CuentasCreacionViewModel
+@{
+    ViewData["Title"] = "Crear Cuenta";
+}
+
+    <div class="jumbotron jumbotron-fluid bg-dark text-white">
+        <div class="container">
+            <h1 class="display-4 mb-4">Crear cuenta</h1>
+            <form asp-action="Crear">
+
+
+
+
+                <div asp-asp-validation-summary="ModelOnly">
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Nombre">Nombre completo</label>
+                    <input asp-for="Nombre" type="text" class="form-control" placeholder="Ingresa tu nombre completo">
+                    <span asp-validation-for="Nombre" ></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TipoCuentaId" class="form-label"></label>
+                    <select asp-for="TipoCuentaId" class="form-select" asp-items="Model.TiposCuentas" ></select>
+                    <span asp-validation-for="TipoCuentaId" ></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Balance">Nombre completo</label>
+                    <input asp-for="Balance" type="text" class="form-control" placeholder="Balance">
+                    <span asp-validation-for="Balance" ></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Descripcion">Nombre completo</label>
+                    <textarea asp-for="Descripcion" type="text" class="form-control" placeholder="Descripcion"></textarea>
+                    <span asp-validation-for="Descripcion" ></span>
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary btn-block mt-4 btn-custom">Enviar</button>
+                <a asp-action="Index" class="btn btn-secondary btn-block mt-4 btn-custom">Cancelar</a>
+
+
+
+            </form>
+        </div>
+    </div>
+
+
+
