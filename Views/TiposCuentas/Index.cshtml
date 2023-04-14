@@ -27,8 +27,8 @@ Cancelar
 		@foreach (var tipoCuenta in Model){
 		<tr>
 			<td>
-				<a asp-action="Editar" asp-route-id="@tipoCuenta.Id" class="btn btn-primary">Editar</a>
-				<a class="btn btn-danger">Borrar</a>
+				<a asp-action="Editar" asp-route-id="@tipoCuenta.Id" modal-id="modal-@tipoCuenta.Id" class="btn btn-primary">Editar</a>
+				<partial name="_Modal" model="tipoCuenta" asp-route-id="@tipoCuenta.Id" /> 
 			</td>
 			<td>
 				@tipoCuenta.Nombre

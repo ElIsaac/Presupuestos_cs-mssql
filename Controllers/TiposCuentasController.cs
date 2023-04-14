@@ -73,5 +73,18 @@ namespace ManejoPresupuesto.controllers{
 	    return RedirectToAction("Index");
 	   
     }
+    [HttpPost]
+	public async Task<ActionResult> Borrar(TipoCuenta tipoCuenta){
+	    var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+	    var tipoCuentaExiste = await repositorioTiposCuentas.ObtenerPorId(tipoCuenta.Id, usuarioId);
+        Console.WriteLine(tipoCuenta);
+        //Console.WriteLine(tipoCuentaExiste);
+	    if(tipoCuentaExiste is null){
+		    return RedirectToAction("NoEncontrado", "Home");
+	    }
+	    await repositorioTiposCuentas.Borrar(tipoCuenta);
+	    return RedirectToAction("Index");
+	   
+    }
 }
 }
