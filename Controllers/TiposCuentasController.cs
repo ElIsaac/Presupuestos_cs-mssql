@@ -86,5 +86,22 @@ namespace ManejoPresupuesto.controllers{
 	    return RedirectToAction("Index");
 	   
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Ordenar([FromBody] int[] ids){
+        var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+        var tiposCuentas = await repositorioTiposCuentas.Obtener(usuarioId);
+        var idsTiposCuentas = tiposCuentas.Select(x=> x.Id);
+        var noPertenece =ids.Except(idsTiposCuentas).ToList();
+        
+        if(noPertenece.Count > 0){
+            return Forbid();
+        }
+
+        var ordenados = ids.Select((valor, indice)=> new TipoCuenta() {Id = valor, Orden = indice + 1}).AsEnumerable();
+
+        await repositorioTiposCuentas.Ordenar(ordenados);
+        return Ok();
+    }
 }
 }

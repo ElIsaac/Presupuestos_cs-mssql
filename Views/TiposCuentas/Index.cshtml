@@ -23,10 +23,11 @@ Cancelar
 			<th>Nombre</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody id="reordenable">
 		@foreach (var tipoCuenta in Model){
 		<tr>
 			<td>
+				<input type="hidden" value="@tipoCuenta.Id" class="ids" >
 				<a asp-action="Editar" asp-route-id="@tipoCuenta.Id" modal-id="modal-@tipoCuenta.Id" class="btn btn-primary">Editar</a>
 				<partial name="_Modal" model="tipoCuenta" asp-route-id="@tipoCuenta.Id" /> 
 			</td>
@@ -38,3 +39,38 @@ Cancelar
 	</tbody>
 
 </table>
+
+@section Scripts {
+	<script>
+		const urlOrdenar = '@Url.Action("ordenar")';
+
+		$(function () {
+			$("#reordenable").sortable({
+				stop: async function (e, ui) {
+					await actualizarOrdenes();
+				}
+			});
+
+			async function actualizarOrdenes() {
+				const ids = obtenerIdsDeElementos();
+				await enviarIds(ids);
+			}
+			function obtenerIdsDeElementos() {
+				const ids = $(".ids").map((index, elemento) => $(elemento).val()).get();
+				return ids;
+			}
+
+			async function enviarIds(ids) {
+				console.log(ids);
+				let data = JSON.stringify(ids);
+				await fetch(urlOrdenar, {
+					method: 'POST',
+					body: data,
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+			}
+		})
+	</script>
+}
