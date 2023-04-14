@@ -1,4 +1,4 @@
-namespace ManejoPresupuesto.Servicios
+namespace ManejoPresupuesto.Services
 {
 	public interface IServicioUsuarios{
 		int ObtenerUsuarioId();

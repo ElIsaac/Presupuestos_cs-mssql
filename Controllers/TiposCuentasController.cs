@@ -12,6 +12,7 @@ namespace ManejoPresupuesto.controllers{
         public TiposCuentasController(IRepositorioTiposCuentas repositorioTiposCuentas, IServicioUsuarios servicioUsuarios)
         {
             this.repositorioTiposCuentas = repositorioTiposCuentas;
+	    this.servicioUsuarios = servicioUsuarios;
         }
 	public async Task<IActionResult>Index(){
 		var usuarioId = servicioUsuarios.ObtenerUsuarioId();
@@ -52,5 +53,25 @@ namespace ManejoPresupuesto.controllers{
             }
             return Json(true);
         }
+	[HttpGet]
+	public async Task<ActionResult> Editar(int id){
+	    var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+	    var tipoCuenta = await repositorioTiposCuentas.ObtenerPorId(id, usuarioId);
+	    if(tipoCuenta is null){
+		    return RedirectToAction("NoEncontrado", "Home");
+	    }
+	    return View(tipoCuenta);
+	}
+	[HttpPost]
+	public async Task<ActionResult> Editar(TipoCuenta tipoCuenta){
+	    var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+	    var tipoCuentaExiste = await repositorioTiposCuentas.ObtenerPorId(tipoCuenta.Id, usuarioId);
+	    if(tipoCuentaExiste is null){
+		    return RedirectToAction("NoEncontrado", "Home");
+	    }
+	    await repositorioTiposCuentas.Actualizar(tipoCuenta);
+	    return RedirectToAction("Index");
+	   
     }
+}
 }
