@@ -1,0 +1,124 @@
+@model IEnumerable<IndiceCuentasViewModel>
+
+@{
+    ViewData["Title"] = "Cuentas";
+
+    
+    string ObtenerClaseBalance(decimal balance){
+        return balance >= 0 ? "" : "text-danger";
+    }
+    string ActivoPasivo(decimal balance){
+        return balance >= 0 ? "Positivo" : "Negativo";
+    }
+    Console.WriteLine(Model);
+}
+
+  <h1 class="display-3">Cuentas</h1>
+  
+  
+  <p>Haga click en "Crear" para agregar una nueva cuenta</p>
+  <p class="lead">
+    <a asp-action="Crear" class="btn btn-primary btn-lg">Crear</a>
+  </p>
+
+
+<hr>
+<div class="row contenedor-totales">
+<div class="col-md-4">
+    <div class="card bg-success text-white mb-3">
+        <div class="card-header">
+            <h5 class="display-6" >Activos</h5>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                @Model.Where(x => x.Balance > 0).Sum(x => x.Balance)
+            </h5>
+            
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-4">
+    <div class="card bg-danger text-white mb-3">
+        <div class="card-header">
+            <h5 class="display-6" >Pasivos</h5>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                @Model.Where(x => x.Balance < 0).Sum(x => x.Balance)
+            </h5>
+        </div>
+    </div>
+</div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white mb-3">
+            <div class="card-header">
+                <h6 class="display-6" >Total</h6>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    @Model.Sum(x => x.Balance)
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<hr>
+<div class="display-6">
+    Desglose
+</div>
+<hr>
+<div class="accordion accordion-flush" id="accordionFlushExample">
+    @foreach (var tipoCuenta in Model)
+    {
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+        @{
+                    
+            var id = tipoCuenta.TipoCuenta.Replace(" ", "");
+            var dataBSTarget = "#"+id.Replace(" ", "");
+            
+            var clasetext = ActivoPasivo(tipoCuenta.Balance);
+        }
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="@dataBSTarget">
+                
+                @tipoCuenta.TipoCuenta    |    Saldo: @clasetext
+            </button>
+        </h2>
+
+        <div id="@id" class="accordion-collapse collapse show">
+
+            <ul class="accordion-body list-group list-group-numbered">
+            @foreach (var cuenta in tipoCuenta.Cuentas)
+            {
+                var claseTipoCuenta = ObtenerClaseBalance(tipoCuenta.Balance);
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class=@claseTipoCuenta>@cuenta.Nombre</div>
+                    </div>
+
+                    <div class="text-end @claseTipoCuenta px-2">@cuenta.Balance</div>
+
+                    <div >
+                        <a asp-action="Editar" asp-route-id="@cuenta.Id" class="btn btn-primary me-2">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <partial name="_Eliminar" model="cuenta" asp-route-id="@cuenta.Id" /> 
+                    </div>
+                    
+                </li>
+            }
+            </ul>
+        </div>
+    </div>
+    }
+</div>
